@@ -2,11 +2,12 @@ import cv2
 import os
 import pandas as pd
 
+
 # Load the pre-trained face detection model
 face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
-
+photo_name= "Sundar Pichai"
 # Create a folder to store the output images
-output_folder = 'output_images'
+output_folder = 'output_images ' + photo_name
 os.makedirs(output_folder, exist_ok=True)
 
 # Create an empty list to store the data frames
@@ -14,6 +15,7 @@ data_frames = []
 
 # Function to save the binary data to an Excel file
 def save_data_to_excel(data_frames, output_file):
+    #data= photo_name
     data = pd.concat(data_frames, ignore_index=True)
     data.to_excel(output_file, index=False)
 
@@ -44,18 +46,18 @@ for filename in os.listdir('images'):
             mouth_region = gray[y+2*h//3:y+h, x:x+w]
 
             # Display and save the extracted regions
-            cv2.imshow('Face', face)
-            cv2.imshow('Left Eye', eye_region_1)
-            cv2.imshow('Right Eye', eye_region_2)
-            cv2.imshow('Nose', nose_region)
-            cv2.imshow('Mouth', mouth_region)
+            #cv2.imshow('Face', face)
+            #cv2.imshow('Left Eye', eye_region_1)
+            #cv2.imshow('Right Eye', eye_region_2)
+            #cv2.imshow('Nose', nose_region)
+            #cv2.imshow('Mouth', mouth_region)
 
             # Save the extracted regions as images
-            cv2.imwrite(os.path.join(output_folder, f'{filename}_face{i+1}.jpg'), face)
-            cv2.imwrite(os.path.join(output_folder, f'{filename}_left_eye{i+1}.jpg'), eye_region_1)
-            cv2.imwrite(os.path.join(output_folder, f'{filename}_right_eye{i+1}.jpg'), eye_region_2)
-            cv2.imwrite(os.path.join(output_folder, f'{filename}_nose{i+1}.jpg'), nose_region)
-            cv2.imwrite(os.path.join(output_folder, f'{filename}_mouth{i+1}.jpg'), mouth_region)
+            cv2.imwrite(os.path.join(output_folder, f'{filename + photo_name}_face{i+1}.jpg'), face)
+            cv2.imwrite(os.path.join(output_folder, f'{filename + photo_name}_left_eye{i+1}.jpg'), eye_region_1)
+            cv2.imwrite(os.path.join(output_folder, f'{filename + photo_name}_right_eye{i+1}.jpg'), eye_region_2)
+            cv2.imwrite(os.path.join(output_folder, f'{filename + photo_name}_nose{i+1}.jpg'), nose_region)
+            cv2.imwrite(os.path.join(output_folder, f'{filename + photo_name}_mouth{i+1}.jpg'), mouth_region)
 
             # Convert the extracted regions to binary data
             face_binary = cv2.imencode('.jpg', face)[1].tobytes()
@@ -65,11 +67,11 @@ for filename in os.listdir('images'):
             mouth_binary = cv2.imencode('.jpg', mouth_region)[1].tobytes()
 
             # Create a data frame for each region and append to the list
-            face_data = pd.DataFrame({'Image': [filename], 'Binary': [face_binary]})
-            eye1_data = pd.DataFrame({'Image': [filename], 'Binary': [eye1_binary]})
-            eye2_data = pd.DataFrame({'Image': [filename], 'Binary': [eye2_binary]})
-            nose_data = pd.DataFrame({'Image': [filename], 'Binary': [nose_binary]})
-            mouth_data = pd.DataFrame({'Image': [filename], 'Binary': [mouth_binary]})
+            face_data = pd.DataFrame({'Image': [filename + photo_name], 'Binary': [face_binary]})
+            eye1_data = pd.DataFrame({'Image': [filename + photo_name], 'Binary': [eye1_binary]})
+            eye2_data = pd.DataFrame({'Image': [filename + photo_name], 'Binary': [eye2_binary]})
+            nose_data = pd.DataFrame({'Image': [filename + photo_name], 'Binary': [nose_binary]})
+            mouth_data = pd.DataFrame({'Image': [filename + photo_name], 'Binary': [mouth_binary]})
 
             data_frames.append(face_data)
             data_frames.append(eye1_data)
@@ -78,7 +80,7 @@ for filename in os.listdir('images'):
             data_frames.append(mouth_data)
 
 # Save the binary data to an Excel file
-output_file = 'binary_data.xlsx'
+output_file = 'binary_data ' + photo_name +'.xlsx'
 save_data_to_excel(data_frames, output_file)
 
 # Close all windows
