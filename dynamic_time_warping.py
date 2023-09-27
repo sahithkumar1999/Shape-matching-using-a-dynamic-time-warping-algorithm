@@ -78,7 +78,6 @@ for template_filename, template_sequence in template_sequences.items():
     if match:
         print(f"Given image matched with {template_filename} (DTW Distance: {distance})")
 
-
         # Plot the sequences and highlight the matched points
         plt.figure(figsize=(8, 4))
         plt.plot(template_sequence[:, 0], template_sequence[:, 1], label='Template Sequence', marker='o', markersize=5)
