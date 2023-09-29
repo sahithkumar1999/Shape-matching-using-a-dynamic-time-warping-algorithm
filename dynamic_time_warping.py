@@ -24,15 +24,16 @@ def shape_matching_with_visualization(template_sequence, target_sequence, thresh
     distance, path = fastdtw(template_sequence, target_sequence)
 
     if distance < threshold:
-        return True, distance, path
+        return True, distance, path   # Return True if the match is below the threshold
     else:
-        return False, distance, path
+        return False, distance, path  # Return False if the match is above the threshold
 
 
 # Function to save the binary data to an Excel file
 def save_data_to_excel(data_frames, output_file):
     data = pd.concat(data_frames, ignore_index=True)
-    data.to_excel(output_file, index=False)
+    data.to_excel(output_file, index=False)    # Save the data frames as an Excel file
+
 
 # Function to perform DTW shape matching
 def shape_matching(template_sequence, target_sequence, threshold):
@@ -52,18 +53,18 @@ for filename in os.listdir('images'):
     if filename.endswith('.jpg') or filename.endswith('.jpeg') or filename.endswith('.png'):
         # Load the image
         image_path = os.path.join('images', filename)
-        template_image = cv2.imread(image_path)
-        template_gray = cv2.cvtColor(template_image, cv2.COLOR_BGR2GRAY)
+        template_image = cv2.imread(image_path)    # Load a template image
+        template_gray = cv2.cvtColor(template_image, cv2.COLOR_BGR2GRAY)  # Convert to grayscale
 
         # Extract the contour of the template image
         contour, _ = cv2.findContours(template_gray, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         template_sequence = np.squeeze(contour)  # Flatten to a 2D array
-        template_sequences[filename] = template_sequence
+        template_sequences[filename] = template_sequence # Store the template sequence
 
 # Load the given image for shape matching
 given_image_path = 'D:\sem 2\Computational Intelligence\Project\Shape-matching-using-a-dynamic-time-warping-algorithm\Check\Check1.jpg'  # Replace with the path to your given image
-given_image = cv2.imread(given_image_path)
-given_gray = cv2.cvtColor(given_image, cv2.COLOR_BGR2GRAY)
+given_image = cv2.imread(given_image_path)  # Load the given image
+given_gray = cv2.cvtColor(given_image, cv2.COLOR_BGR2GRAY)  # Convert to grayscale
 
 matching_results = []
 
@@ -78,19 +79,29 @@ for template_filename, template_sequence in template_sequences.items():
     if match:
         print(f"Given image matched with {template_filename} (DTW Distance: {distance})")
 
+        # Find peak positions
+        max_template_position = np.argmax(template_sequence, axis=0)  # Find peak position in the template sequence
+        max_given_position = np.argmax(given_sequence, axis=0)   # Find peak position in the given sequence
+        
+        print("Peak position in the template sequence:", max_template_position)
+        print("Peak position in the given sequence:", max_given_position)
+
+        # Extract the x and y coordinates of the matched points
+        matched_x = [template_sequence[i, 0] for i, _ in path]
+        matched_y = [template_sequence[i, 1] for i, _ in path]
+
         # Plot the sequences and highlight the matched points
         plt.figure(figsize=(8, 4))
         plt.plot(template_sequence[:, 0], template_sequence[:, 1], label='Template Sequence', marker='o', markersize=5)
         plt.plot(given_sequence[:, 0], given_sequence[:, 1], label='Given Sequence', marker='x', markersize=5)
-        for (i, j) in path:
-            plt.plot([template_sequence[i, 0], given_sequence[j, 0]], [template_sequence[i, 1], given_sequence[j, 1]], 'k--')
+        plt.scatter(matched_x, matched_y, c='r', label='Matched Points')  # Plot matched points in red
         plt.legend()
         plt.title(f"Matching Result with {template_filename} (DTW Distance: {distance})")
         plt.xlabel("X")
         plt.ylabel("Y")
         plt.show()
 
-    matching_results.append((template_filename, match, distance))
+    matching_results.append((template_filename, match, distance))  # Store the matching results
 
 
 # Sort matching results by distance
