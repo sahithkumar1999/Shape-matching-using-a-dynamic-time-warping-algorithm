@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 
 
 # Load the pre-trained face detection model
-face_cascade = cv2.CascadeClassifier('D:\sem 2\Computational Intelligence\Project\DTW\haarcascade_frontalface_default.xml')
+face_cascade = cv2.CascadeClassifier('D:\sem 2\Computational Intelligence\Project\Shape-matching-using-a-dynamic-time-warping-algorithm\haarcascade_frontalface_default.xml')
 photo_name = "Sundar Pichai"
 
 # Create a folder to store the output images
@@ -61,7 +61,7 @@ for filename in os.listdir('images'):
         template_sequences[filename] = template_sequence
 
 # Load the given image for shape matching
-given_image_path = 'D:\sem 2\Computational Intelligence\Project\DTW\download.jpeg'  # Replace with the path to your given image
+given_image_path = 'D:\sem 2\Computational Intelligence\Project\Shape-matching-using-a-dynamic-time-warping-algorithm\Check\Check1.jpg'  # Replace with the path to your given image
 given_image = cv2.imread(given_image_path)
 given_gray = cv2.cvtColor(given_image, cv2.COLOR_BGR2GRAY)
 
