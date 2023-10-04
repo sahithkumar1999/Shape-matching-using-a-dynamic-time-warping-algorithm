@@ -4,7 +4,35 @@ import pandas as pd
 from fastdtw import fastdtw
 import numpy as np
 import matplotlib.pyplot as plt
+import tkinter as tk
+from tkinter import filedialog
+from tkinter import messagebox
+from tkinter import PhotoImage
 
+# Create the main application window
+app = tk.Tk()
+app.title("Shape Matching Application")
+app.geometry("800x600")
+
+
+
+# Create a Text widget for displaying text
+text_widget = tk.Text(app, wrap=tk.WORD)  # Use wrap=tk.WORD to wrap text at word boundaries
+text_widget.pack(fill=tk.BOTH, expand=True)  # Fill and expand to take up the entire window
+
+# Insert text into the Text widget
+text_widget.insert(tk.END, "Shape Matching with Dynamic Time Warping\n", ("main_heading",))
+text_widget.insert(tk.END, "Subheading\n\n", ("sub_heading",))
+text_widget.insert(tk.END, "In the world of computer vision and pattern recognition, the task of shape matching plays a critical role. Shape matching involves finding similarities or correspondences between two shapes, which can have numerous applications, including image recognition, object tracking, and gesture recognition. One powerful technique for shape matching is the Dynamic Time Warping (DTW) algorithm.")
+
+
+
+
+# Configure text tags for formatting
+text_widget.tag_configure("main_heading", font=("Helvetica", 20, "bold"))
+text_widget.tag_configure("sub_heading", font=("Helvetica", 16, "underline"))
+
+app.mainloop()
 
 # Load the pre-trained face detection model
 face_cascade = cv2.CascadeClassifier('D:\sem 2\Computational Intelligence\Project\Shape-matching-using-a-dynamic-time-warping-algorithm\haarcascade_frontalface_default.xml')
@@ -62,7 +90,7 @@ for filename in os.listdir('images'):
         template_sequences[filename] = template_sequence # Store the template sequence
 
 # Load the given image for shape matching
-given_image_path = 'D:\sem 2\Computational Intelligence\Project\Shape-matching-using-a-dynamic-time-warping-algorithm\Check\Check1.jpg'  # Replace with the path to your given image
+given_image_path = 'Check/Check2.jpeg'  # Replace with the path to your given image
 given_image = cv2.imread(given_image_path)  # Load the given image
 given_gray = cv2.cvtColor(given_image, cv2.COLOR_BGR2GRAY)  # Convert to grayscale
 
