@@ -16,7 +16,11 @@ import shutil
 # Create the main application window
 app = tk.Tk()
 app.title("Shape Matching Application")
-app.geometry("800x600")
+# Get the screen width and height
+screen_width = app.winfo_screenwidth()
+screen_height = app.winfo_screenheight()
+# Set the window size to fit the screen
+app.geometry(f"{screen_width}x{screen_height}")
 
 # Create a Text widget for displaying text
 text_widget = tk.Text(app, wrap=tk.WORD)
@@ -24,15 +28,23 @@ text_widget.pack(fill=tk.BOTH, expand=True)
 
 # Insert text into the Text widget
 text_widget.insert(tk.END, "Shape Matching with Dynamic Time Warping\n", ("main_heading",))
-text_widget.insert(tk.END, "Subheading\n\n", ("sub_heading",))
-text_widget.insert(tk.END, "In the world of computer vision and pattern recognition, the task of shape matching plays a critical role. Shape matching involves finding similarities or correspondences between two shapes, which can have numerous applications, including image recognition, object tracking, and gesture recognition. One powerful technique for shape matching is the Dynamic Time Warping (DTW) algorithm.")
+
+text_widget.insert(tk.END, "Project Overview:\n", ("sub_heading",))
+text_widget.insert(tk.END, "The Dynamic Time Warping-Based Shape Matching for Computer Vision project is a significant exploration into the realm of computer vision and pattern recognition. This research focuses on the development of an intelligent system capable of identifying similarities and correspondences between two shapes within digital images. Shape matching is a fundamental task with widespread applications, including image recognition, object tracking, and gesture recognition. To address this challenge, the project leverages the Dynamic Time Warping (DTW) algorithm, a powerful technique that enables precise matching even when shapes are subject to variations in speed or scale.\n\n")
+
+text_widget.insert(tk.END, "Key Contributions:\n", ("sub_heading",))
+text_widget.insert(tk.END, "This project contributes to the academic community by demonstrating the practical application of DTW in real-world scenarios. It showcases the importance of shape matching in computer vision and highlights the versatility of DTW in handling complex shape variations. By providing a user-friendly graphical interface, the project bridges the gap between sophisticated algorithms and end-users, making shape matching accessible to a broader audience. Additionally, the system's ability to generate visual representations of matching results and store data in Excel files enhances its utility for research and analysis in computer vision studies.\n\n")
+
+text_widget.insert(tk.END, "Significance:\n", ("sub_heading",))
+text_widget.insert(tk.END, "The project's significance lies in its potential to advance various domains within computer vision. Researchers, practitioners, and students can benefit from the project's insights into shape matching methodologies and its user-friendly interface for experimentation. Moreover, the academic community can explore and extend the project's capabilities, fostering innovation in computer vision applications. Ultimately, the project contributes to the broader goal of harnessing advanced algorithms like DTW for practical, real-world solutions in the field of computer vision")
+
 
 # Configure text tags for formatting
 text_widget.tag_configure("main_heading", font=("Helvetica", 20, "bold"))
 text_widget.tag_configure("sub_heading", font=("Helvetica", 16, "underline"))
 
 # Create a label for displaying the matched image with a placeholder text
-image_label = tk.Label(app, text="Uploaded Image Will Be Displayed Here")
+image_label = tk.Label(app, text="press the below Upload Image button to upload the input image")
 image_label.pack()
 
 # Create an "Upload Image" button
@@ -46,6 +58,7 @@ os.makedirs(output_folder, exist_ok=True)
 # Create a folder to store the output graphs
 output_graph_folder = 'output_Graph'
 os.makedirs(output_graph_folder, exist_ok=True)
+
 
 # Load the pre-trained face detection model
 face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
@@ -115,14 +128,14 @@ def match_shape(input_image_path):
         match, distance, path = shape_matching_with_visualization(template_sequence, given_sequence, threshold=200)
 
         if match:
-            print(f"Given image matched with {template_filename} (DTW Distance: {distance})")
+            #print(f"Given image matched with {template_filename} (DTW Distance: {distance})")
 
             # Find peak positions
             max_template_position = np.argmax(template_sequence, axis=0)
             max_given_position = np.argmax(given_sequence, axis=0)
 
-            print("Peak position in the template sequence:", max_template_position)
-            print("Peak position in the given sequence:", max_given_position)
+            #print("Peak position in the template sequence:", max_template_position)
+            #print("Peak position in the given sequence:", max_given_position)
 
             # Extract the x and y coordinates of the matched points
             matched_x = [template_sequence[i, 0] for i, _ in path]
@@ -137,6 +150,10 @@ def match_shape(input_image_path):
             plt.title(f"Matching Result with {template_filename} (DTW Distance: {distance})")
             plt.xlabel("X")
             plt.ylabel("Y")
+
+
+            matching_results_text.insert(tk.END, f"Peak position in the template sequence: {max_template_position}\n")
+            matching_results_text.insert(tk.END, f"Peak position in the given sequence: {max_given_position}\n")
 
             # Save the graph image in the "output_Graph" folder
             graph_image_path = os.path.join(output_graph_folder, f'graph.png')
@@ -165,6 +182,8 @@ def match_shape(input_image_path):
     for result in matching_results:
         if result[1]:
             matching_results_text.insert(tk.END, f"Given image matched with {result[0]} (DTW Distance: {result[2]})\n")
+
+            
 
             # Load and display the matched image
             matched_image_path = os.path.join(output_graph_folder, f'graph.png')
@@ -198,11 +217,6 @@ def upload_image():
 
         # Perform shape matching with the uploaded image
         match_shape(os.path.join(destination_path, destination_file))
-
-
-
-
-
 
 # Create an "Upload Image" button
 upload_button.config(command=upload_image)
