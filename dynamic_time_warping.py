@@ -125,7 +125,7 @@ def match_shape(input_image_path):
 
     # Perform shape matching with template sequences
     for template_filename, template_sequence in template_sequences.items():
-        match, distance, path = shape_matching_with_visualization(template_sequence, given_sequence, threshold=200)
+        match, distance, path = shape_matching_with_visualization(template_sequence, given_sequence, threshold=100)
 
         if match:
             #print(f"Given image matched with {template_filename} (DTW Distance: {distance})")
@@ -205,7 +205,7 @@ def upload_image():
     if file_path:
         # Define the destination path and file name
         destination_path = 'output_Graph'
-        destination_file = 'graph.jpg'
+        destination_file = 'uploaded_Image.jpg'
 
         # Copy the selected image to the destination
         shutil.copy(file_path, os.path.join(destination_path, destination_file))
